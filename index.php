@@ -1,6 +1,7 @@
 <?php 
-include_once './simple_html_dom/HtmlWeb.php';
-require_once('./config.php');
+chdir(__DIR__);
+require('./simple_html_dom/HtmlWeb.php');
+require('./config.php');
 
 use simplehtmldom\HtmlWeb;
 
@@ -70,57 +71,91 @@ $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
 $date = date('Y-m-d-');
 try{
-    foreach($countries as $country) {
-        $query = "INSERT INTO worldometers
-        (
-            measurement_date,
-            country,
-            total_cases,
-            new_cases,
-            total_deaths,
-            new_deaths,
-            total_recovered,
-            active_cases,
-            serious_cases,
-            cases_per_million,
-            deaths_per_million
-        ) VALUES (
-            :measurement_date,
-            :country,
-            :total_cases,
-            :new_cases,
-            :total_deaths,
-            :new_deaths,
-            :total_recovered,
-            :active_cases,
-            :serious_cases,
-            :cases_per_million,
-            :deaths_per_million
-        )";
-    
-        $sth = $db->prepare($query);
-        $sth->execute(
-            array(
-                ':measurement_date' => $date,
-                ':country' => $country['country'],
-                ':total_cases' => $country['total_cases'],
-                ':new_cases' => $country['new_cases'],
-                ':total_deaths' => $country['total_deaths'],
-                ':new_deaths' => $country['new_deaths'],
-                ':total_recovered' => $country['total_recovered'],
-                ':active_cases' => $country['active_cases'],
-                ':serious_cases' => $country['serious_cases'],
-                ':cases_per_million' => $country['cases_per_million'],
-                ':deaths_per_million' => $country['deaths_per_million']
-            ));
+    $query = "SELECT worldometers_id FROM worldometers WHERE measurement_date = :measurement_date AND country = :country";
+    $sth = $db->prepare($query);
+    $sth->execute(array(':measurement_date' => $date, ':country' => $countries[0]['country']));
+    $data = $sth->fetch();
+    if ($data == false) {
+        foreach($countries as $country) {
+            $query = "INSERT INTO worldometers
+            (
+                measurement_date,
+                country,
+                total_cases,
+                new_cases,
+                total_deaths,
+                new_deaths,
+                total_recovered,
+                active_cases,
+                serious_cases,
+                cases_per_million,
+                deaths_per_million
+            ) VALUES (
+                :measurement_date,
+                :country,
+                :total_cases,
+                :new_cases,
+                :total_deaths,
+                :new_deaths,
+                :total_recovered,
+                :active_cases,
+                :serious_cases,
+                :cases_per_million,
+                :deaths_per_million
+            )";
+            $sth = $db->prepare($query);
+            $sth->execute(
+                array(
+                    ':measurement_date' => $date,
+                    ':country' => $country['country'],
+                    ':total_cases' => $country['total_cases'],
+                    ':new_cases' => $country['new_cases'],
+                    ':total_deaths' => $country['total_deaths'],
+                    ':new_deaths' => $country['new_deaths'],
+                    ':total_recovered' => $country['total_recovered'],
+                    ':active_cases' => $country['active_cases'],
+                    ':serious_cases' => $country['serious_cases'],
+                    ':cases_per_million' => $country['cases_per_million'],
+                    ':deaths_per_million' => $country['deaths_per_million']
+                ));
+        }
+    } else {
+        foreach($countries as $country) {
+            $query = "UPDATE worldometers SET
+                total_cases = :total_cases,
+                new_cases = :new_cases,
+                total_deaths = :total_deaths,
+                new_deaths = :new_deaths,
+                total_recovered = :total_recovered,
+                active_cases = :active_cases,
+                serious_cases = :serious_cases,
+                cases_per_million = :cases_per_million,
+                deaths_per_million = :deaths_per_million
+                WHERE measurement_date = :measurement_date AND country = :country";
+            $sth = $db->prepare($query);
+            $sth->execute(
+                array(
+                    ':total_cases' => $country['total_cases'],
+                    ':new_cases' => $country['new_cases'],
+                    ':total_deaths' => $country['total_deaths'],
+                    ':new_deaths' => $country['new_deaths'],
+                    ':total_recovered' => $country['total_recovered'],
+                    ':active_cases' => $country['active_cases'],
+                    ':serious_cases' => $country['serious_cases'],
+                    ':cases_per_million' => $country['cases_per_million'],
+                    ':deaths_per_million' => $country['deaths_per_million'],
+                    ':measurement_date' => $date,
+                    ':country' => $country['country']
+                ));
+        }
     }
 } catch (PDOException $e) {
     $error_array = $sth->errorInfo();
     $error = $error_array[2];
-    print_r($error);
+    echo($error);
 }
 
-print_r('</br>OK');
+echo('OK');
 
 
 
