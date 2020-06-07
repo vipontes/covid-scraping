@@ -46,24 +46,27 @@ foreach($html->find('.tab-pane') as $tabPane) {
                                 $country['total_recovered'] = $data;
                             }
                             else if ( $i == 7 ) {
-                                $country['active_cases'] =  $data;
+                                $country['new_recovered'] = $data;
                             }
                             else if ( $i == 8 ) {
-                                $country['serious_cases'] = $data;
+                                $country['active_cases'] =  $data;
                             }
                             else if ( $i == 9 ) {
-                                $country['cases_per_million'] = $data;
+                                $country['serious_cases'] = $data;
                             }
                             else if ( $i == 10 ) {
-                                $country['deaths_per_million'] = $data;
+                                $country['cases_per_million'] = $data;
                             }
                             else if ( $i == 11 ) {
-                                $country['total_tests'] = $data;
+                                $country['deaths_per_million'] = $data;
                             }
                             else if ( $i == 12 ) {
-                                $country['tests_per_million'] = $data;
+                                $country['total_tests'] = $data;
                             }
                             else if ( $i == 13 ) {
+                                $country['tests_per_million'] = $data;
+                            }
+                            else if ( $i == 14 ) {
                                 $country['population'] = $data;
                             }
 
@@ -111,24 +114,27 @@ foreach($html->find('.tab-pane') as $tabPane) {
                                 $country['total_recovered'] = $data;
                             }
                             else if ( $i == 7 ) {
-                                $country['active_cases'] =  $data;
+                                $country['total_recovered'] =  $data;
                             }
                             else if ( $i == 8 ) {
-                                $country['serious_cases'] = $data;
+                                $country['active_cases'] =  $data;
                             }
                             else if ( $i == 9 ) {
-                                $country['cases_per_million'] = $data;
+                                $country['serious_cases'] = $data;
                             }
                             else if ( $i == 10 ) {
-                                $country['deaths_per_million'] = $data;
+                                $country['cases_per_million'] = $data;
                             }
                             else if ( $i == 11 ) {
-                                $country['total_tests'] = $data;
+                                $country['deaths_per_million'] = $data;
                             }
                             else if ( $i == 12 ) {
-                                $country['tests_per_million'] = $data;
+                                $country['total_tests'] = $data;
                             }
                             else if ( $i == 13 ) {
+                                $country['tests_per_million'] = $data;
+                            }
+                            else if ( $i == 14 ) {
                                 $country['population'] = $data;
                             }
 
